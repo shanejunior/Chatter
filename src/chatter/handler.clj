@@ -14,9 +14,12 @@
   [messages]
   (page/html5
     [:head
-     [:title "chatter"]]
-    [:body
-     [:h1 "Our Chat App"]
+     [:title "chatter"]
+     (page/include-css "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css")
+     (page/include-js  "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js")]
+     (page/include-css "/chatter.css")
+     [:body
+     [:h1 "Shane's Chat App"]
      [:p
       (form/form-to
        [:post "/"]
@@ -24,7 +27,7 @@
        "Message: " (form/text-field "msg")
        (form/submit-button "Submit"))]
      [:p
-      [:table
+      [:table#messages.table.table-bordered.table-hover
        (map (fn [m] [:tr [:td (:name m)] [:td (:message m)]]) messages)]]]))
 
 (defn update-messages!
@@ -39,6 +42,7 @@
           new-messages (update-messages! chat-messages name-param msg-param)]
       (generate-message-view new-messages)
       ))
+    (route/resources "/")
     (route/not-found "Not Found"))
 
 (def app (wrap-params app-routes))
